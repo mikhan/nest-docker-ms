@@ -1,0 +1,9 @@
+{
+  "name": "@decet/api",
+  "version": "0.0.1",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "hbs": "^4.2.0"
+  }
+}

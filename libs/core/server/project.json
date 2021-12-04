@@ -1,0 +1,26 @@
+{
+  "root": "libs/core/server",
+  "sourceRoot": "libs/core/server/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/node:package",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/core/server",
+        "tsConfig": "libs/core/server/tsconfig.lib.json",
+        "packageJson": "libs/core/server/package.json",
+        "main": "libs/core/server/src/index.ts",
+        "assets": ["libs/core/server/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/core/server/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}

@@ -1,0 +1,40 @@
+<html lang='en'>
+
+<head>
+  <meta charset='UTF-8' />
+  <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+  <base href="/ms2/">
+  <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+  <title>SSE Test Application</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    :root {
+      height: 100%;
+    }
+
+    body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2em;
+      margin: 0;
+      padding: 2em;
+      height: 100%;
+    }
+
+    iframe{
+      height: 100%;
+      width: 100%;
+      border: 2px solid gray;
+    }
+  </style>
+</head>
+
+<body>
+  <iframe src="chat/Jose?init"></iframe>
+  <iframe src="chat/Sara"></iframe>
+</body>
+
+</html>

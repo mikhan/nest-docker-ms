@@ -1,0 +1,30 @@
+version: '3.8'
+services:  
+  api:
+    container_name: decet_api
+    image: decet:api
+    environment:
+      PORT: 3003
+    networks:
+      - decet-network
+    ports:
+      - '3000:3003'
+  
+  ms1:
+    container_name: decet_ms1
+    image: decet:ms1
+    environment:
+      PORT: 3001
+    networks:
+      - decet-network
+  
+  ms2:
+    container_name: decet_ms2
+    image: decet:ms2
+    environment:
+      PORT: 3002
+    networks:
+      - decet-network
+
+networks: 
+  decet-network:

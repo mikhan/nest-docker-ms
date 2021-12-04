@@ -1,0 +1,51 @@
+{
+  "root": "apps/ms2",
+  "sourceRoot": "apps/ms2/src",
+  "projectType": "application",
+  "targets": {
+    "deploy": {
+      "builder": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "docker build -f apps/ms2/Dockerfile . -t decet:ms2"
+      }
+    },
+    "build": {
+      "executor": "@nrwl/node:build",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/ms2",
+        "main": "apps/ms2/src/main.ts",
+        "tsConfig": "apps/ms2/tsconfig.app.json",
+        "assets": ["apps/ms2/src/assets"],
+        "generatePackageJson": true
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/ms2/src/environments/environment.ts",
+              "with": "apps/ms2/src/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/node:execute",
+      "options": {
+        "buildTarget": "ms2:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/ms2/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}

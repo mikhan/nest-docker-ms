@@ -1,0 +1,25 @@
+<html lang='en'>
+
+<head>
+  <meta charset='UTF-8' />
+  <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+  <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+  <title>SSE Test Application</title>
+  <link href="/css/ms2.css" rel="stylesheet">
+  <script>const init = {{ init }}</script>
+  <script src="https://unpkg.com/@reactivex/rxjs@6.6.7/dist/global/rxjs.umd.min.js" crossorigin="anonymous"></script>
+  <script src="/js/ms2.js" type="module" defer></script>
+</head>
+
+<body>
+  <main class="container" id="container">
+    <h3 class="title" id="username">{{username}}</h3>
+    <ul class="messages" id="messages"></ul>
+    <form method="post" name="messagesForm">
+      <div class="input" id="input"></div>
+      <button type="submit">Send</button>
+    </form>
+  </main>
+</body>
+
+</html>
