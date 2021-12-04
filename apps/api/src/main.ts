@@ -1,18 +1,22 @@
-import { NestFactory } from '@nestjs/core'
-import { NestExpressApplication } from '@nestjs/platform-express'
-import { join } from 'path'
-import { AppModule } from './app/app.module'
+import { NestFactory } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
+import { AppModule } from './app/app.module';
+import { ConfigService } from './app/services/config.service';
 
 async function bootstrap() {
-  const host = process.env.HOST ?? 'localhost'
-  const port = Number(process.env.PORT ?? '3000')
-  const app = await NestFactory.create<NestExpressApplication>(AppModule)
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  app.useStaticAssets(join(process.cwd(), 'public'))
-  app.setBaseViewsDir(join(process.cwd(), 'public/views'))
-  app.setViewEngine('hbs')
+  app.useStaticAssets(join(process.cwd(), 'public'));
+  app.setBaseViewsDir(join(process.cwd(), 'public/views'));
+  app.setViewEngine('hbs');
 
-  await app.listen(port, host)
-  console.log(`Listening on http://${host}:${port}`)
+  const { api, ms1, ms2 } = app.get(ConfigService);
+
+  await app.listen(api.options.port, api.options.host);
+
+  console.log(`Listening api@http://${api.options.host}:${api.options.port}`);
+  console.log(`Listening ms1@http://${ms1.options.host}:${ms1.options.port}`);
+  console.log(`Listening ms2@http://${ms2.options.host}:${ms2.options.port}`);
 }
-bootstrap()
+bootstrap();
