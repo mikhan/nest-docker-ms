@@ -10,6 +10,7 @@
   },
   "private": true,
   "dependencies": {
+    "@angular-architects/module-federation": "^12.5.3",
     "@angular/animations": "^13.0.0",
     "@angular/common": "^13.0.0",
     "@angular/compiler": "^13.0.0",
@@ -35,6 +36,9 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~13.0.0",
+    "@angular-eslint/eslint-plugin": "~12.6.0",
+    "@angular-eslint/eslint-plugin-template": "~12.6.0",
+    "@angular-eslint/template-parser": "~12.6.0",
     "@angular/cli": "~13.0.0",
     "@angular/compiler-cli": "^13.0.0",
     "@angular/language-service": "^13.0.0",
