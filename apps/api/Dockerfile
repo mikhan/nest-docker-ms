@@ -1,11 +1,9 @@
-FROM node:alpine
+FROM node:16.13.1-alpine
 
 WORKDIR /usr/src/app
 
 COPY ./dist/apps/api .
 COPY ./public ./public
-
-EXPOSE ${API_PORT}
 
 RUN yarn
 

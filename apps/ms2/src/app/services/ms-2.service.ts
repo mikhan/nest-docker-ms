@@ -1,39 +1,62 @@
-import { Injectable } from '@nestjs/common'
-import { tap, ReplaySubject } from 'rxjs'
+import { Injectable, Inject, CACHE_MANAGER } from '@nestjs/common';
+import { Cache } from 'cache-manager';
+import { tap, Subject, from, concat, shareReplay, switchMap } from 'rxjs';
 
 export interface Message {
-  username: string
-  content: string
+  username: string;
+  content: string;
 }
 
 @Injectable()
 export class Ms2Service {
-  private messages = new ReplaySubject<Message>(50)
-  public messages$ = this.messages.asObservable()
+  private chacheMessages$ = from(this.getCachedMessages()).pipe(
+    switchMap((messages) => from(messages))
+  );
 
-  constructor() {
+  private messages = new Subject<Message>();
+  public messages$ = concat(
+    this.chacheMessages$,
+    this.messages.asObservable()
+  ).pipe(shareReplay(50));
+
+  constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {
     this.messages$.pipe(
-      tap(({ username, content }) => this.log(username, content)),
-    )
+      tap(({ username, content }) => this.log(username, content))
+    );
   }
 
   public getMessages() {
-    return this.messages$
+    return this.messages$;
   }
 
-  public sendMessage(message: Message) {
-    this.messages.next(message)
+  private cache?: Message[];
+  private async getCachedMessages() {
+    if (!this.cache)
+      this.cache = (await this.cacheManager.get<Message[]>('messages')) ?? [];
 
-    this.log(message.username, message.content)
-
-    return message
+    return this.cache;
   }
 
-  number = 0
+  private async cacheMessage(message: Message) {
+    const messages = await this.getCachedMessages();
+    this.cache = [...messages, message];
+    await this.cacheManager.set('messages', this.cache);
+  }
+
+  public async sendMessage(message: Message) {
+    await this.cacheMessage(message);
+    this.messages.next(message);
+
+    this.log(message.username, message.content);
+
+    return message;
+  }
+
+  number = 0;
 
   private log(username: string, content: string) {
-    const id = String(++this.number).padStart(4, '0')
-    const time = new Date().toISOString().slice(11, 19)
-    console.log(`${id} ${time} -> ${username}: ${content.slice(0, 40)}`)
+    const id = String(++this.number).padStart(4, '0');
+    const time = new Date().toISOString().slice(11, 19);
+    console.log(`${id} ${time} -> ${username}: ${content.slice(0, 40)}`);
   }
 }

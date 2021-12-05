@@ -1,27 +1,38 @@
-version: "3"
+version: "3.8"
 
 networks:
   decet-network:
     driver: bridge
 
+volumes:
+  database-data:
+    driver: local
+  redis-data:
+    driver: local
+
 services:
   api:
-    env_file:
-      - .env
     container_name: decet_api
+    image: decet/api:latest
     build:
       context: .
       dockerfile: ./apps/api/Dockerfile
+    depends_on:
+      - ms1
+      - ms2
+      - redis
+      - database
     ports:
       - 9000:${API_PORT}
+    expose:
+      - ${API_PORT}
     networks:
       - decet-network
     restart: always
 
   ms1:
-    env_file:
-      - .env
     container_name: decet_ms1
+    image: decet/ms1:latest
     build:
       context: .
       dockerfile: ./apps/ms1/Dockerfile
@@ -30,12 +41,49 @@ services:
     restart: always
 
   ms2:
-    env_file:
-      - .env
     container_name: decet_ms2
+    image: decet/ms2:latest
     build:
       context: .
       dockerfile: ./apps/ms2/Dockerfile
     networks:
       - decet-network
     restart: always
+
+  redis:
+    container_name: redis_db
+    image: redis:6.2.6
+    command: bash -c "redis-server --appendonly yes --save 60 1 --loglevel warning --requirepass ${REDIS_PASSWORD}"
+    restart: always
+    ports:
+      - 6379:${REDIS_PORT}
+    networks:
+      - decet-network
+    volumes:
+      - ./redis-volume:/data
+
+    # container_name: decet_redis
+    # command: bash -c "redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}"
+    # image: redis:6.2.6-alpine
+    # restart: always
+    # ports:
+    #     - 6379:${REDIS_PORT}
+    # networks:
+    #   - decet-network
+    # volumes:
+    #     - ./redis-volume:/data
+
+  database:
+    container_name: decet_database
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - 5432:${DB_PORT}
+    networks:
+      - decet-network
+    volumes:
+      - database-data:/var/lib/postgresql/data

@@ -9,7 +9,7 @@ import {
   Param,
   Query,
 } from '@nestjs/common';
-import { map, tap } from 'rxjs';
+import { finalize, map, tap } from 'rxjs';
 import { Ms2Service, Message } from '../services/ms2.service';
 
 @Controller('ms2')
@@ -36,12 +36,13 @@ export class Ms2Controller {
 
   @Sse('messages')
   messages() {
-    const s = `[${String(++this.stream).padStart(2, '0')}]`;
+    const stream = `[${String(++this.stream).padStart(2, '0')}]`;
     this.logger.log(`getMessages`);
 
     return this.ms2Service.getMessages().pipe(
-      tap(({ username, content }) => this.log(username, content, s)),
-      map((data) => ({ data }))
+      tap(({ username, content }) => this.log(username, content, stream)),
+      map((data) => ({ data })),
+      finalize(() => console.log(`${stream} client is disconnected`))
     );
   }
 
