@@ -6,7 +6,7 @@
     "deploy": {
       "builder": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "docker build -f apps/api/Dockerfile . -t decet:api"
+        "command": "docker-compose up -d api"
       }
     },
     "build": {

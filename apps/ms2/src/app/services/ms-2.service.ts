@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { tap, ReplaySubject } from 'rxjs'
 
 export interface Message {
@@ -8,8 +8,6 @@ export interface Message {
 
 @Injectable()
 export class Ms2Service {
-  private readonly logger = new Logger('Ms2Service')
-
   private messages = new ReplaySubject<Message>(50)
   public messages$ = this.messages.asObservable()
 

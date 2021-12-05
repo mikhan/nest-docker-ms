@@ -2,10 +2,10 @@ FROM node:alpine
 
 WORKDIR /usr/src/app
 
-COPY package.json ./
-COPY app.js /usr/src/app
+COPY ./api/package.json ./
+COPY ./api/app.js /usr/src/app
 
-EXPOSE 9000
+EXPOSE ${API_PORT}
 
 RUN npm install
 

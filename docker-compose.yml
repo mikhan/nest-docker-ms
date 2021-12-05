@@ -4,48 +4,38 @@ networks:
   decet-network:
     driver: bridge
 
-services:  
+services:
   api:
+    env_file:
+      - .env
     container_name: decet_api
-    # image: decet:api
     build:
       context: .
-      dockerfile: apps/api/Dockerfile
-    environment:
-      PORT: 3000
-      MS1_HOST: ms1
-      MS1_PORT: 3001
-      MS2_HOST: ms2
-      MS2_PORT: 3002
+      dockerfile: ./apps/api/Dockerfile
     ports:
-      - 8080:3000
-    links:
-        - ms1:ms1
-        - ms2:ms2
+      - 9000:${API_PORT}
     networks:
       - decet-network
     restart: always
 
   ms1:
+    env_file:
+      - .env
     container_name: decet_ms1
     build:
       context: .
-      dockerfile: apps/ms1/Dockerfile
-    environment:
-      PORT: 3000
-    ports:
-      - 3001:3000
+      dockerfile: ./apps/ms1/Dockerfile
     networks:
       - decet-network
+    restart: always
 
   ms2:
+    env_file:
+      - .env
     container_name: decet_ms2
     build:
       context: .
-      dockerfile: apps/ms2/Dockerfile
-    environment:
-      PORT: 3000
-    ports:
-      - 3002:3000
+      dockerfile: ./apps/ms2/Dockerfile
     networks:
       - decet-network
+    restart: always
