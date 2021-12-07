@@ -1,0 +1,23 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  height: 100%;
+}
+
+body {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 450px));
+  justify-content: center;
+  gap: 2em;
+  margin: 0;
+  padding: 2em;
+  height: 100%;
+}
+
+iframe {
+  height: 100%;
+  width: 100%;
+  border: 2px solid gray;
+}

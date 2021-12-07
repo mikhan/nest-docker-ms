@@ -1,4 +1,9 @@
-import { Injectable, Inject, CACHE_MANAGER } from '@nestjs/common';
+import {
+  Injectable,
+  Inject,
+  CACHE_MANAGER,
+  OnModuleDestroy,
+} from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { tap, Subject, from, concat, shareReplay, switchMap } from 'rxjs';
 
@@ -8,8 +13,9 @@ export interface Message {
 }
 
 @Injectable()
-export class Ms2Service {
+export class Ms2Service implements OnModuleDestroy {
   private chacheMessages$ = from(this.getCachedMessages()).pipe(
+    tap((m) => console.log('cache length', m?.length)),
     switchMap((messages) => from(messages))
   );
 
@@ -25,14 +31,19 @@ export class Ms2Service {
     );
   }
 
+  onModuleDestroy() {
+    return this.cacheManager.set('messages', this.cache, { ttl: 0 });
+  }
+
   public getMessages() {
     return this.messages$;
   }
 
   private cache?: Message[];
   private async getCachedMessages() {
-    if (!this.cache)
+    if (!this.cache) {
       this.cache = (await this.cacheManager.get<Message[]>('messages')) ?? [];
+    }
 
     return this.cache;
   }
@@ -40,7 +51,6 @@ export class Ms2Service {
   private async cacheMessage(message: Message) {
     const messages = await this.getCachedMessages();
     this.cache = [...messages, message];
-    await this.cacheManager.set('messages', this.cache);
   }
 
   public async sendMessage(message: Message) {

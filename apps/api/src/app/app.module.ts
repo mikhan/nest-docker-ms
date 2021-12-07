@@ -1,10 +1,6 @@
 import { BullModule } from '@nestjs/bull';
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import {
-  ClientProxyFactory,
-  ClientsModule,
-  Transport,
-} from '@nestjs/microservices';
+import { Module } from '@nestjs/common';
+import { ClientProxyFactory } from '@nestjs/microservices';
 import { AppController } from './controllers/app.controller';
 import { Ms1Controller } from './controllers/ms1.controller';
 import { Ms2Controller } from './controllers/ms2.controller';
@@ -42,8 +38,4 @@ import { ConfigService } from './services/config.service';
     LoggerMiddleware,
   ],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer): void {
-    consumer.apply(LoggerMiddleware).forRoutes('*');
-  }
-}
+export class AppModule {}

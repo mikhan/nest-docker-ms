@@ -7,12 +7,14 @@ async function bootstrap() {
   const port = Number(process.env.MS2_PORT ?? '3002');
 
   const app = await NestFactory.create(AppModule);
+  app.enableShutdownHooks();
   app.connectMicroservice({
     transport: Transport.TCP,
     options: { host, port },
   });
 
   await app.startAllMicroservices();
-  console.log(`Listening on http://${host}:${port}`);
+
+  console.log(`Listening on tcp://${host}:${port}`);
 }
 bootstrap();

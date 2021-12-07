@@ -34,7 +34,7 @@ export class Ms2Controller {
 
   stream = 0;
 
-  @Sse('messages')
+  @Sse('subscription')
   messages() {
     const stream = `[${String(++this.stream).padStart(2, '0')}]`;
     this.logger.log(`getMessages`);

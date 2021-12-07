@@ -16,13 +16,13 @@
         "outputPath": "dist/apps/ms2",
         "main": "apps/ms2/src/main.ts",
         "tsConfig": "apps/ms2/tsconfig.app.json",
-        "assets": ["apps/ms2/src/assets"],
-        "generatePackageJson": true
+        "assets": ["apps/ms2/src/assets"]
       },
       "configurations": {
         "production": {
           "optimization": true,
           "extractLicenses": true,
+          "generatePackageJson": true,
           "inspect": false,
           "fileReplacements": [
             {

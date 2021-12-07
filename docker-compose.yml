@@ -4,16 +4,12 @@ networks:
   decet-network:
     driver: bridge
 
-volumes:
-  database-data:
-    driver: local
-  redis-data:
-    driver: local
-
 services:
   api:
+    env_file:
+      - .env
     container_name: decet_api
-    image: decet/api:latest
+    image: mikhansan/docker-test-api
     build:
       context: .
       dockerfile: ./apps/api/Dockerfile
@@ -23,7 +19,7 @@ services:
       - redis
       - database
     ports:
-      - 9000:${API_PORT}
+      - 3000:${API_PORT}
     expose:
       - ${API_PORT}
     networks:
@@ -31,8 +27,10 @@ services:
     restart: always
 
   ms1:
+    env_file:
+      - .env
     container_name: decet_ms1
-    image: decet/ms1:latest
+    image: mikhansan/docker-test-ms1
     build:
       context: .
       dockerfile: ./apps/ms1/Dockerfile
@@ -41,37 +39,30 @@ services:
     restart: always
 
   ms2:
+    env_file:
+      - .env
     container_name: decet_ms2
-    image: decet/ms2:latest
+    image: mikhansan/docker-test-ms2
     build:
       context: .
       dockerfile: ./apps/ms2/Dockerfile
+    depends_on:
+      - redis
     networks:
       - decet-network
     restart: always
 
   redis:
-    container_name: redis_db
+    container_name: decet_redis
     image: redis:6.2.6
-    command: bash -c "redis-server --appendonly yes --save 60 1 --loglevel warning --requirepass ${REDIS_PASSWORD}"
+    # command: bash -c "redis-server --appendonly yes --save 60 1 --loglevel warning --requirepass ${REDIS_PASSWORD}"
     restart: always
     ports:
       - 6379:${REDIS_PORT}
     networks:
       - decet-network
     volumes:
-      - ./redis-volume:/data
-
-    # container_name: decet_redis
-    # command: bash -c "redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}"
-    # image: redis:6.2.6-alpine
-    # restart: always
-    # ports:
-    #     - 6379:${REDIS_PORT}
-    # networks:
-    #   - decet-network
-    # volumes:
-    #     - ./redis-volume:/data
+      - ${REDIS_STORAGE}:/data
 
   database:
     container_name: decet_database
@@ -86,4 +77,4 @@ services:
     networks:
       - decet-network
     volumes:
-      - database-data:/var/lib/postgresql/data
+      - ${DB_STORAGE}:/var/lib/postgresql/data

@@ -16,13 +16,17 @@
         "outputPath": "dist/apps/api",
         "main": "apps/api/src/main.ts",
         "tsConfig": "apps/api/tsconfig.app.json",
-        "assets": ["apps/api/src/assets"],
-        "generatePackageJson": true
+        "assets": [
+          "apps/api/src/assets",
+          "apps/api/src/public",
+          "apps/api/src/views"
+        ]
       },
       "configurations": {
         "production": {
           "optimization": true,
           "extractLicenses": true,
+          "generatePackageJson": true,
           "inspect": false,
           "fileReplacements": [
             {
@@ -44,6 +48,12 @@
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": ["apps/api/**/*.ts"]
+      }
+    },
+    "build-all": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": ["nx build api", "nx build ms1", "nx build ms2"]
       }
     }
   },

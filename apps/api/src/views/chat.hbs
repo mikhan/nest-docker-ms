@@ -5,10 +5,19 @@
   <meta http-equiv='X-UA-Compatible' content='IE=edge' />
   <meta name='viewport' content='width=device-width, initial-scale=1.0' />
   <title>SSE Test Application</title>
-  <link href="/css/ms2.css" rel="stylesheet">
-  <script>const init = {{ init }}</script>
+  <link href="/css/chat.css" rel="stylesheet">
   <script src="https://unpkg.com/@reactivex/rxjs@6.6.7/dist/global/rxjs.umd.min.js" crossorigin="anonymous"></script>
-  <script src="/js/ms2.js" type="module" defer></script>
+  <script type="module" defer>
+    import { start } from '/js/chat.js'
+    
+    const autoStart = {{ init }}
+    const username = document.getElementById('username').textContent
+    const containerElement = document.getElementById('container')
+    const inputElement = document.getElementById('input')
+    const listElement = document.getElementById('messages')
+
+    start(username, containerElement, inputElement, listElement, autoStart)
+  </script>
 </head>
 
 <body>
