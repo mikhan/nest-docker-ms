@@ -4,6 +4,7 @@ import { CacheModule, Module } from '@nestjs/common';
 import { RedisModule } from '@liaoliaots/nestjs-redis';
 import { Ms2Controller } from './controllers/ms-2.controller';
 import { Ms2Service } from './services/ms-2.service';
+import { CacheService } from './services/cache.service';
 
 const host = process.env.REDIS_HOST ?? 'localhost';
 const port = Number(process.env.REDIS_PORT ?? '6379');
@@ -35,6 +36,6 @@ console.log(
     }),
   ],
   controllers: [Ms2Controller],
-  providers: [Ms2Service],
+  providers: [Ms2Service, CacheService],
 })
 export class AppModule {}

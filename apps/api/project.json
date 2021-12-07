@@ -34,14 +34,22 @@
               "with": "apps/api/src/environments/environment.prod.ts"
             }
           ]
-        }
-      }
+        },
+        "development": {}
+      },
+      "defaultConfiguration": "production"
     },
     "serve": {
       "executor": "@nrwl/node:execute",
-      "options": {
-        "buildTarget": "api:build"
-      }
+      "configurations": {
+        "production": {
+          "buildTarget": "api:build:production"
+        },
+        "development": {
+          "buildTarget": "api:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",

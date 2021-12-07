@@ -30,14 +30,22 @@
               "with": "apps/ms1/src/environments/environment.prod.ts"
             }
           ]
-        }
-      }
+        },
+        "development": {}
+      },
+      "defaultConfiguration": "production"
     },
     "serve": {
       "executor": "@nrwl/node:execute",
-      "options": {
-        "buildTarget": "ms1:build"
-      }
+      "configurations": {
+        "production": {
+          "buildTarget": "ms1:build:production"
+        },
+        "development": {
+          "buildTarget": "ms1:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
