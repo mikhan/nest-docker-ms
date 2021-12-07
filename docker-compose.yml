@@ -55,7 +55,7 @@ services:
   redis:
     container_name: decet_redis
     image: redis:6.2.6
-    # command: bash -c "redis-server --appendonly yes --save 60 1 --loglevel warning --requirepass ${REDIS_PASSWORD}"
+    command: bash -c "redis-server --appendonly yes --save 60 1 --loglevel warning --requirepass ${REDIS_PASSWORD}"
     restart: always
     ports:
       - 6379:${REDIS_PORT}

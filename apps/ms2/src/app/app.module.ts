@@ -22,7 +22,7 @@ console.log(
       config: {
         host: host,
         port: port,
-        //password: password,
+        password: password,
         db: database,
       },
     }),
@@ -31,7 +31,7 @@ console.log(
       store: redisStore,
       host: host,
       port: port,
-      //password: password,
+      password: password,
       db: database,
     }),
   ],
